@@ -5,69 +5,118 @@
 
 <script>
 
+var gridWidth = 40;
+var gridHeight = 40; 
+var cellWidth = 8;
+var cellHeight = 8;
+    
+    
+var gradientZone1 = {
+    startRow: 0,
+    endRow: 20,
+    startColor: {R: 234, G: 250, B: 255, A: 1.0},
+    endColor: {R: 0, G: 120, B: 234, A: 1.0}
+};
+    
+var gradientZone2 = {
+    startRow: 21,
+    endRow: 40,
+    startColor: {R: 54, G: 100, B: 34, A: 1.0},
+    endColor: {R: 250, G: 250, B: 234, A: 1.0}
+};
+    
+    
 $(document).ready(function() {
 
-    makeGrid(40, 255);
+    makeGrid(80, 80, 5, 5);
     
-    //makeRow(1,0,255,255,1);
-    
-    var arrR = [];
-    for(var r = 100; r <= 180; r++) {
-        
-        if (r%3 == 0) {
-
-            arrR.push(r);            
-            
-        }
-    }
-    
-    console.log(arrR);
-    
-    $.each(arrR, function(idx, val) {
-        
-        makeRow(idx,val,0,255,1);
-        
-    });
-    
+    makeGradientZone(gradientZone1);
+    makeGradientZone(gradientZone2);
     
 });
     
-function makeRow(y,r,g,b,a){
-    
-    for(var x = 1; x <= 40; x++) {
-        
-        setColor(x,y,r,g,b,a);
+function makeGradientZone(obj) {
 
+    //express a gradient zone object
+    var spanRow = obj.endRow - obj.startRow;
+    
+    var spanR = obj.endColor.R - obj.startColor.R;
+    var stepR = Math.ceil(spanR / spanRow);
+
+    var spanG = obj.endColor.G - obj.startColor.G;
+    var stepG = Math.ceil(spanG / spanRow);
+ 
+    var spanB = obj.endColor.B - obj.startColor.B;
+    var stepB = Math.ceil(spanB / spanRow);
+
+    var spanA = obj.endColor.A - obj.startColor.A;
+    var stepA = Math.ceil(spanA / spanRow);
+    
+    var r = obj.startColor.R;
+    var g = obj.startColor.G;
+    var b = obj.startColor.B;
+    var a = obj.startColor.A;
+  
+    for(var row = obj.startRow; row <= obj.endRow; row++) {        
+        
+        r = r + stepR;
+        g = g + stepG;
+        b = b + stepB;
+        a = a + stepA;
+        
+        var clr = {};
+
+        clr.R = r;         
+        clr.G = g;         
+        clr.B = b;
+        clr.A = a;
+
+        //console.log(row, clr.R, clr.G, clr.B, clr.A);       
+        makeRow(row, clr.R, clr.G, clr.B, clr.A);
+    }
+    
+}
+    
+function makeRow(y, r, g, b, a){
+    
+    //call setColor on an entire row
+    for(var x = 1; x <= gridWidth; x++) {        
+        setColor(x,y,r,g,b,a);
     }    
     
 }
 
 function setColor(x, y, r, g, b, a) {
     
+    //set the color of a cell
+    
+    //address the cell
     var idSqr = "_"+x+"_"+y+"_sqr";
+    //construct the color
     var rgbaCol = "rgba(" + r + "," + g + "," + b + "," + a + ")";
+    //assign the color to the cell
     $("#" + idSqr).css("backgroundColor", rgbaCol);
     
 }
 
-function makeGrid(x, y){
+function makeGrid(){
 
-    var c = [];
-    gridMaxY = y;
-    gridMaxX = x;
-    
+    //construct a table element to serve as an addressable grid
+    var c = [];    
     c.push("<table>");
-    for(var y = 1; y <= gridMaxY; y++) {
+    for(var y = 1; y <= gridHeight; y++) {
         c.push("<tr>");
-        for(var x = 1;  x <= gridMaxX; x++) {
-            c.push("<td id = '_" + x + "_" + y + "_sqr' class = 'sqr'></td>");
-            
+        for(var x = 1;  x <= gridWidth; x++) {
+            c.push("<td id = '_" + x + "_" + y + "_sqr' class = 'sqr'></td>");           
         }
         c.push("</tr>");
     }
     c.push("</table>");
-    
     $("#main").html(c.join(""));
+    
+    //assign the size in pixels of individual cells in the grid
+    var cssSize = {height: cellHeight, width: cellWidth};
+    $("td").css(cssSize);
 }
 
 </script>
@@ -77,14 +126,14 @@ function makeGrid(x, y){
 
 table {
     
-    xxborder: 1px solid gray;
+    
     border-collapse: collapse;
 }
     
 td {
-    height: 4px;
-    width: 4px;
+    border: 1px solid gray;
 }
+
 
 </style>
 <body>
