@@ -1,0 +1,92 @@
+<html>
+<head>
+
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+
+<script>
+
+$(document).ready(function() {
+
+    makeGrid(40, 255);
+    
+    //makeRow(1,0,255,255,1);
+    
+    var arrR = [];
+    for(var r = 100; r <= 180; r++) {
+        
+        if (r%3 == 0) {
+
+            arrR.push(r);            
+            
+        }
+    }
+    
+    console.log(arrR);
+    
+    $.each(arrR, function(idx, val) {
+        
+        makeRow(idx,val,0,255,1);
+        
+    });
+    
+    
+});
+    
+function makeRow(y,r,g,b,a){
+    
+    for(var x = 1; x <= 40; x++) {
+        
+        setColor(x,y,r,g,b,a);
+
+    }    
+    
+}
+
+function setColor(x, y, r, g, b, a) {
+    
+    var idSqr = "_"+x+"_"+y+"_sqr";
+    var rgbaCol = "rgba(" + r + "," + g + "," + b + "," + a + ")";
+    $("#" + idSqr).css("backgroundColor", rgbaCol);
+    
+}
+
+function makeGrid(x, y){
+
+    var c = [];
+    gridMaxY = y;
+    gridMaxX = x;
+    
+    c.push("<table>");
+    for(var y = 1; y <= gridMaxY; y++) {
+        c.push("<tr>");
+        for(var x = 1;  x <= gridMaxX; x++) {
+            c.push("<td id = '_" + x + "_" + y + "_sqr' class = 'sqr'></td>");
+            
+        }
+        c.push("</tr>");
+    }
+    c.push("</table>");
+    
+    $("#main").html(c.join(""));
+}
+
+</script>
+
+
+<style>
+
+table {
+    
+    xxborder: 1px solid gray;
+    border-collapse: collapse;
+}
+    
+td {
+    height: 4px;
+    width: 4px;
+}
+
+</style>
+<body>
+
+<div id="main"></div>
