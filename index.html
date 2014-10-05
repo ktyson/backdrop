@@ -3,37 +3,45 @@
 
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 
+<script src="datafiles/test01.js"></script>
+    
 <script>
 
-var gridWidth = 40;
-var gridHeight = 40; 
-var cellWidth = 8;
-var cellHeight = 8;
+var gridWidth = 0;
+var gridHeight = 0; 
+var cellWidth = 0;
+var cellHeight = 0;
+var cellBorders = false;
+   
     
+
     
-var gradientZone1 = {
-    startRow: 0,
-    endRow: 20,
-    startColor: {R: 234, G: 250, B: 255, A: 1.0},
-    endColor: {R: 0, G: 120, B: 234, A: 1.0}
-};
-    
-var gradientZone2 = {
-    startRow: 21,
-    endRow: 40,
-    startColor: {R: 54, G: 100, B: 34, A: 1.0},
-    endColor: {R: 250, G: 250, B: 234, A: 1.0}
-};
-    
+
     
 $(document).ready(function() {
-
-    makeGrid(80, 80, 5, 5);
-    
-    makeGradientZone(gradientZone1);
-    makeGradientZone(gradientZone2);
+  
+    loadFile();
     
 });
+    
+    
+function loadFile() {
+    
+    $("#header").html(gradientZoneFile.name);
+    
+    gridWidth = gradientZoneFile.gridWidth;
+    gridHeight = gradientZoneFile.gridHeight; 
+    cellWidth = gradientZoneFile.cellWidth;
+    cellHeight = gradientZoneFile.cellHeight;    
+    cellBorders = gradientZoneFile.cellBorders;
+    
+    makeGrid();
+    
+    $.each(gradientZoneFile.gradientZones, function(idx, zn) {
+        makeGradientZone(zn);  
+    });    
+        
+}
     
 function makeGradientZone(obj) {
 
@@ -117,25 +125,25 @@ function makeGrid(){
     //assign the size in pixels of individual cells in the grid
     var cssSize = {height: cellHeight, width: cellWidth};
     $("td").css(cssSize);
+    
+    //assign border characteristics
+    if(cellBorders) {
+        $("td").css("border", "1px solid gray");
+    } else {
+        $("td").css("border", "none");
+    }
+    
 }
 
 </script>
 
 
 <style>
-
-table {
-    
-    
+table {    
     border-collapse: collapse;
 }
-    
-td {
-    border: 1px solid gray;
-}
-
-
 </style>
+    
 <body>
-
+<div id="header"></div>
 <div id="main"></div>

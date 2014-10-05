@@ -1,0 +1,71 @@
+<html>
+<head>
+	<title></title>
+    
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="jslib/jscolor/jscolor.js"></script>   
+    
+    <script>
+    
+ 
+        
+    $(document).ready(function() {
+    
+        $("#select").on("click", function() {
+            
+            var r = Math.floor($(".color").get(0).color.rgb[0] * 255);
+            var g = Math.floor($(".color").get(0).color.rgb[1] * 255);
+            var b = Math.floor($(".color").get(0).color.rgb[2] * 255);
+            
+            $("#red").val(r);
+            $("#green").val(g);
+            $("#blue").val(b);
+            
+            var clrObj = {};
+            clrObj.R = r;
+            clrObj.G = g;
+            clrObj.B = b;
+            clrObj.A = 1.0;
+            
+            
+            $("#obj").val(JSON.stringify(clrObj));
+        
+            $("body").css("backgroundColor", rgb(r,g,b));
+            
+        });
+    
+    });
+        
+        function rgb(r, g, b){
+  return ["rgb(",r,",",g,",",b,")"].join("");
+}
+    
+    </script>
+    
+</head>
+    
+<style>
+    .txt {
+        width:40px;   
+    }
+    .txtLong {
+        width:220px;   
+    }
+</style>
+<body>
+
+    
+
+    
+	<input type='button' id='select' value='Select'> <input class="color" value="66ff00">
+    <br/>
+    <input id='obj' class='txtLong'>
+    <br/>
+    <input id='red' class='txt'>
+    <br/>
+    <input id='green' class='txt'>
+    <br/>
+    <input id='blue' class='txt'>
+
+</body>
+</html>
