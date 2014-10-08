@@ -32,8 +32,7 @@ var gradientZoneFile = {
             endRow: 60,
             startColor: {"R":255,"G":137,"B":32,"A":1},
             endColor: {"R":255,"G":245,"B":107,"A":1}
-        }
-        
+        }       
         
     ]   
 };

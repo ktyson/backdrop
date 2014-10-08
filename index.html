@@ -13,9 +13,6 @@ var cellWidth = 0;
 var cellHeight = 0;
 var cellBorders = false;
    
-    
-
-    
 
     
 $(document).ready(function() {
@@ -39,8 +36,49 @@ function loadFile() {
     
     $.each(gradientZoneFile.gradientZones, function(idx, zn) {
         makeGradientZone(zn);  
-    });    
+    }); 
+    
+    randomizeGradientZone(gradientZoneFile.gradientZones[4])
         
+    getColor(30,40);
+    
+}
+   
+function getColor(x,y) {
+    
+    //address the cell
+    var idSqr = "_"+x+"_"+y+"_sqr";
+    
+    var clr = $("#" + idSqr).css("backgroundColor");
+    var arrEls = clr.split(/\(|\)|\, /g); //replace(/\s/g,'')
+    console.log(clr, arrEls[1], arrEls[2], arrEls[3]);
+    
+}
+    
+function randomizeGradientZone(obj) {
+
+    //obj.endRow obj.startRow obj.endColor.X obj.startColor.X
+
+  
+    for(var row = obj.startRow; row <= obj.endRow; row++) {        
+        
+        var y = row; 
+        
+        //call setColor for each cell in row
+        for(var x = 1; x <= gridWidth; x++) { 
+            
+            var doChange = Math.random();
+            
+            if(doChange > 0.9) {
+
+                setColor(x,y,obj.startColor.R ,obj.startColor.G ,obj.startColor.B ,obj.startColor.A);
+                
+            }
+            
+            
+        }
+    }
+    
 }
     
 function makeGradientZone(obj) {
