@@ -1,10 +1,10 @@
 var gradientZoneFile = {
     name: "test01",
-    gridWidth:  50,
+    gridWidth:  60,
     gridHeight:  60, 
-    cellWidth:  8,
-    cellHeight:  8,    
-    cellBorders: true,
+    cellWidth:  4,
+    cellHeight:  4,    
+    cellBorders: false,
     gradientZones: [
         
      {
@@ -46,7 +46,7 @@ var gradientZoneFile = {
         startOnHorizonPct: 0.0,
         endOnHorizonPct: 1.0,
         startDownVertexPct: 0.533,
-        verticalExtensionPct: 0.167,
+        verticalExtensionPct: 0.0167,
             startColor: {R: 24, G: 38, B: 24, A: 1.0},
             endColor: {R: 24, G: 38, B: 24, A: 1.0}
 
@@ -54,10 +54,10 @@ var gradientZoneFile = {
     {
         gradientType: "linear",
         directionality: "down",
-        startOnHorizonPct: 0.0,
-        endOnHorizonPct: 1.0,
-        startDownVertexPct: 0.91,
-        verticalExtensionPct: 0.383,
+        startOnHorizonPct: 0,
+        endOnHorizonPct: 1,
+        startDownVertexPct: 0.549,
+        verticalExtensionPct: 0.459,
             startColor: {"R":255,"G":137,"B":32,"A":1},
             endColor: {"R":255,"G":245,"B":107,"A":1}
 

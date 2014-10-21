@@ -20,6 +20,42 @@ bdp.backdrop = (function() {
 
 	
 	//private methods
+    
+    
+        
+    function loadFile(gradientZoneFile) {
+
+        $("#header").html(gradientZoneFile.name);
+
+        gridWidth = gradientZoneFile.gridWidth;
+        gridHeight = gradientZoneFile.gridHeight; 
+        cellWidth = gradientZoneFile.cellWidth;
+        cellHeight = gradientZoneFile.cellHeight;    
+        cellBorders = gradientZoneFile.cellBorders;
+
+        createGrid("main");
+        
+        
+        $.each(gradientZoneFile.gradientZones, function(idx, gradient) {
+            
+            if(gradient.gradientType == "linear") {
+                makeGradientZone(gradient); 
+            }
+            
+            if(gradient.gradientType == "expansion") {
+                makeExpansionZone(gradient); 
+            }            
+            
+             
+        }); 
+
+
+    }
+   
+    
+    
+    
+    
 	function createGrid(containerId) {
         //construct a table element to serve as an addressable grid
         var c = [];    
@@ -46,12 +82,46 @@ bdp.backdrop = (function() {
             $("td").css("border", "none");
         }
         
-        
-        makeGradientZone(gradient1);
-        makeGradientZone(gradient2);
+
         
 	}
 	
+    
+    function makeExpansionZone(gradient) {
+        
+        var arrColoringInstructions = [];
+        
+        //express a gradient zone object
+        
+        //determine the base
+        var baseStartCellX = Math.ceil(gridWidth * gradient.startOnHorizonPct);
+        
+        var baseEndCellX = Math.ceil(gridWidth * gradient.endOnHorizonPct);
+        
+        var baseY = Math.ceil(gridHeight * gradient.startDownVertexPct);
+        
+        //record the base
+        for(var x = baseStartCellX; x <= baseEndCellX; x++) {
+            
+            var y = baseY;
+            var coloringInstruction = {};
+            coloringInstruction.x = x;
+            coloringInstruction.y = y;
+            coloringInstruction.r = gradient.startColor.R;
+            coloringInstruction.g = gradient.startColor.G;
+            coloringInstruction.b = gradient.startColor.B;
+            coloringInstruction.a = gradient.startColor.A;
+            arrColoringInstructions.push(coloringInstruction);
+                       
+        }
+        
+        
+        
+        
+        
+        colorGradient(arrColoringInstructions);
+        
+    }
     
  
     function makeGradientZone(gradient) {
@@ -84,39 +154,42 @@ bdp.backdrop = (function() {
         
         
         //do the extension with gradient
-        var extent = Math.ceil(gridHeight * gradient.verticalExtensionPct);
-        
-        
+        var extent = Math.floor(gridHeight * gradient.verticalExtensionPct);
+    
             
         var ctr = 0;
-        var extent
-        for(var y = baseY; y <= (baseY + extent); y++) {
-                console.log("y", ctr, y);
+        
+        var incrementor = 1;
+        var endY = (baseY + extent);
+        if(gradient.directionality == "up") {
+            incrementor = -1;
+            endY = (baseY - extent);
+        }
+        
+        for(var y = baseY; y != endY; y = y + incrementor) {
+
+            if(ctr > 1000) {
+                break;
+                console.log("runaway");
+            }
+
             for(var x = baseStartCellX; x <= baseEndCellX; x++) {
 
                 var coloringInstruction = {};
                 coloringInstruction.x = x;
                 coloringInstruction.y = y;
-                coloringInstruction.r = getGradientColor(gradient.startColor.R, gradient.endColor.R, extent, ctr);
-                coloringInstruction.g = getGradientColor(gradient.startColor.G, gradient.endColor.G, extent, ctr);
-                coloringInstruction.b = getGradientColor(gradient.startColor.B, gradient.endColor.B, extent, ctr);
-                coloringInstruction.a = getGradientColor(gradient.startColor.A, gradient.endColor.A, extent, ctr);
-                arrColoringInstructions.push(coloringInstruction);                
+                coloringInstruction.r = gradient.startColor.R + (Math.ceil((gradient.endColor.R - gradient.startColor.R) / extent) * ctr);
+                coloringInstruction.g = gradient.startColor.G + (Math.ceil((gradient.endColor.G - gradient.startColor.G) / extent) * ctr);
+                coloringInstruction.b = gradient.startColor.B + (Math.ceil((gradient.endColor.B - gradient.startColor.B) / extent) * ctr);
+                coloringInstruction.a = gradient.startColor.A + (Math.ceil((gradient.endColor.A - gradient.startColor.A) / extent) * ctr);       
                 
+                arrColoringInstructions.push(coloringInstruction);     
                 
-            }
-            
+            }        
             
             ctr++;
         }
-        
-        function  getGradientColor(startValue, endValue, extent, ctr) {
-            
-            //find the correct gradient step for this value
-            var baseStep = Math.ceil((endValue - startValue) / extent);
-            //return the start color value plus the counted numbers of steps taken so far
-            return startValue + (baseStep*ctr);
-        }
+
         
       
         colorGradient(arrColoringInstructions);
@@ -141,31 +214,33 @@ bdp.backdrop = (function() {
 
         //address the cell
         var idSqr = "_"+x+"_"+y+"_sqr";
-        //construct the color
-        var rgbaCol = "rgba(" + r + "," + g + "," + b + "," + a + ")";
-        //assign the color to the cell
-        $("#" + idSqr).css("backgroundColor", rgbaCol);
+        if($("#" + idSqr).length) {
+            //construct the color
+            var rgbaCol = "rgba(" + r + "," + g + "," + b + "," + a + ")";
+            //assign the color to the cell
+            $("#" + idSqr).css("backgroundColor", rgbaCol);
+        }
 
     }
     
 	return {
 //		//public attributes
-        GridWidth: 40,
-        GridHeight: 40,
+//        GridWidth: 40,
+//        GridHeight: 40,
 //		thatThis: 3.12,
 //		
 //		//public methods
 		CreateGrid: function(containerId, config){
 			
-            setGrid(this.GridWidth,this.GridHeight);
-            createGrid(containerId);
-            
+            //setGrid(this.GridWidth,this.GridHeight);
+            //createGrid(containerId);
+            //loadFile(gradientZoneFile);
             //gridWidth = GridWidth;
             //gridHeight = GridHeight;
+		},
+		LoadFile: function(gradientZoneFile){
+			loadFile(gradientZoneFile);
+
 		}
-//		AnotherFunc: function(thisIn){
-//			doit;
-//			return something;
-//		}
 	};
 })();
