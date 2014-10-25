@@ -154,8 +154,7 @@ bdp.backdrop = (function() {
         
         
         //do the extension with gradient
-        var extent = Math.floor(gridHeight * gradient.verticalExtensionPct);
-    
+        var extent = Math.floor(gridHeight * gradient.verticalExtensionPct)    
             
         var ctr = 0;
         
