@@ -1,0 +1,69 @@
+<html>
+<head>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+
+$(document).ready(function(){
+
+	
+	var c = [];
+	c.push("<table style='borderCollapse:collapse;'>");
+	
+	for(var i = 0; i < 6; i++) {
+	
+	
+		c.push(createCells(2));
+		
+	}
+
+//hexString = yourNumber.toString(16);
+//yourNumber = parseInt(hexString, 16);
+//var num = 16777216;
+var hex1 = (16777216).toString(16);
+var hex2 = (255).toString(16);
+var hex3 = (255 * 255 * 255).toString(16);
+var num1 = parseInt(0xffffff, 16);
+
+var hex4 = (376926741).toString(16);
+
+console.log(num1, hex1, hex2, hex3, hex4);
+
+	//16,777,216
+	c.push("</table>");
+	
+	$("body").html(c.join(''));
+	
+	
+});
+
+
+
+
+
+function createCells(num) {
+
+	var c = [];
+	c.push("<tr><td>" + num + "</td><td style='background-color:red;'>&nbsp;&nbsp;</td></tr>");	
+	return c.join('');
+	
+}
+
+
+
+</script>
+
+
+</head>
+<body>
+
+http://krazydad.com/tutorials/makecolors.php
+
+http://blog.asmartbear.com/color-wheels.html
+
+http://www.handprint.com/HP/WCL/color2.html#top
+
+</body>
+</html>
